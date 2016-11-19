@@ -120,7 +120,8 @@ window.onload = function() {
     webgazer.setRegression('ridge') /* currently must set regression and tracker */
         .setTracker('clmtrackr')
         .setGazeListener(function(data, clock) {
-         if(clock > 5000 && data != null){
+         if(clock > 10000 && data != null){
+            webgazer.clearGazeListener();
             classifer(data.x, data.y);
          }
          //   console.log(data); /* data is an object containing an x and y key which are the x and y prediction coordinates (no bounds limiting) */
