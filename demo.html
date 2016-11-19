@@ -20,27 +20,79 @@
 
     var w = window.innerWidth;
     var h = window.innerHeight;
-    var sectorsVisited = [];
 
+    var sectorsVisited = [];
+    var sectorICounter = 0;
+    var sectorIICounter = 0;
+    var sectorIIICounter = 0;
+    var sectorIVCounter = 0;
+    var sectorVCounter = 0;
+    var sectorVICounter = 0;
+    var sectorVIICounter = 0;
+    var sectorVIIICounter = 0;
+    var sectorIXCounter = 0;
+
+    var reset = function() {
+        var sectorICounter = 0;
+        var sectorIICounter = 0;
+        var sectorIIICounter = 0;
+        var sectorIVCounter = 0;
+        var sectorVCounter = 0;
+        var sectorVICounter = 0;
+        var sectorVIICounter = 0;
+        var sectorVIIICounter = 0;
+        var sectorIXCounter = 0;
+    }
     var classifer = function(x, y){
         // leftmost column
        if(x < (w/5)){
          if(y < 3*h/8){
+            reset();
            console.log("sector I");
+           sectorICounter++;
+           if (sectorICounter > 1000) {
+            console.log(sectorsVisited);
+           }
+
          } else if(y < (3*h/4) && y > 3*h/8){
+            reset();
             console.log("sector IV");
+            sectorIVCounter++;
+            if (sectorIVCounter > 1000) {
+             alert("It works~");
+            }
          } else if (y > 3*h/4) {
+            reset();
             console.log("Sector VII");
+            sectorVIICounter++;
+            if (sectorVIICounter > 1000) {
+             alert("It works~");
+            }
          }
        }
 
        // middle column
        if (2*w/5 < x < 4*w/5) {
         if(y < 3*h/8){
+            reset();
            console.log("sector II");
+           sectorIICounter++;
+           if (sectorIICounter > 500) {
+            alert("It works~");
+           }
          } else if(y < (3*h/4) && y > 3*h/8){
+            reset();
             console.log("sector V");
+            sectorVCounter++;
+           if (sectorVCounter > 500) {
+            alert("It works~");
+           }
          } else if (y > 3*h/4) {
+            reset();
+            sectorVIIICounter++;
+            if (sectorVIIICounter > 500) {
+             alert("It works~");
+            }
             console.log("Sector VIII");
          }
        }
@@ -48,11 +100,26 @@
        // rightmost column
        if (x < 4*w/5) {
         if(y < 3*h/8){
+            reset();
            console.log("sector III");
+           sectorIIICounter++;
+           if (sectorIIICounter > 500) {
+            alert("It works~");
+           }
          } else if(y < (3*h/4) && y > 3*h/8){
+            reset();
+            sectorVICounter++;
+            if (sectorVICounter > 500) {
+             alert("It works~");
+            }
             console.log("sector VI");
          } else if (y > 3*h/4) {
+            reset();
             console.log("Sector IX");
+            sectorIXCounter++;
+            if (sectorIXCounter > 500) {
+             alert("It works~");
+            }
          }
        }  
     }
@@ -61,7 +128,7 @@ window.onload = function() {
     webgazer.setRegression('ridge') /* currently must set regression and tracker */
         .setTracker('clmtrackr')
         .setGazeListener(function(data, clock) {
-         if(clock > 20000 && data != null){
+         if(clock > 5000 && data != null){
             classifer(data.x, data.y);
          }
          //   console.log(data); /* data is an object containing an x and y key which are the x and y prediction coordinates (no bounds limiting) */
