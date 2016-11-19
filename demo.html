@@ -3,6 +3,7 @@
     <HEAD>
         <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
         <TITLE>Simple Demonstration of how WebGazer.js works</TITLE>
+        <link rel="stylesheet" href="styles.css">
     </HEAD>
     <BODY LANG="en-US" LINK="#0000ff" DIR="LTR">
     <div id="mydiv">
@@ -20,6 +21,7 @@
 
     var w = window.innerWidth;
     var h = window.innerHeight;
+    var first = 0;
 
     var sectorsVisited = [];
     var sectorICounter = 0;
@@ -43,6 +45,13 @@
         var sectorVIIICounter = 0;
         var sectorIXCounter = 0;
     }
+
+    var initCalibration = function(){
+        alert("Move mouse and eyes to all 9 \
+            green areas, clicking within \ 
+            each as much as possible to calibrate the eye tracker. ");
+    }
+
     var classifer = function(x, y){
         // leftmost column
        if(x < (w/5)){
@@ -120,6 +129,10 @@ window.onload = function() {
     webgazer.setRegression('ridge') /* currently must set regression and tracker */
         .setTracker('clmtrackr')
         .setGazeListener(function(data, clock) {
+         if(first == 0){
+            initCalibration();
+            first = 1;
+         }
          if(clock > 10000 && data != null){
             webgazer.clearGazeListener();
             classifer(data.x, data.y);
