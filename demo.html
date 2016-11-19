@@ -3,16 +3,19 @@
     <HEAD>
         <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
         <TITLE>Simple Demonstration of how WebGazer.js works</TITLE>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </HEAD>
     <BODY LANG="en-US" LINK="#0000ff" DIR="LTR">
-    <div id="mydiv">
-        <h1 style="color:#C0C0C0" align="right">
-            Click on a few locations within the screen<br>
-            while looking purposefully at the cursor.<br>
-            Both clicks and cursor movements<br>
-            make the predictions more accurate. 
-        </h1>
-    </div>
+    <div class="row">Test</div>
+    <div class="row">Test</div>
+    <div class="row">Test</div>
 
 
         <script src="build/webgazer.js"></script>
@@ -20,20 +23,14 @@
 
     var w = window.innerWidth;
     var h = window.innerHeight;
+    var init = 0; 
 
     var sectorsVisited = [];
     var sectorCounters = [];
-    var sectorICounter = 0;
-    var sectorIICounter = 0;
-    var sectorIIICounter = 0;
-    var sectorIVCounter = 0;
-    var sectorVCounter = 0;
-    var sectorVICounter = 0;
-    var sectorVIICounter = 0;
-    var sectorVIIICounter = 0;
-    var sectorIXCounter = 0;
 
-    
+    var initiateCalibration = function() {
+        alert("Look at mouse and click in each of the 9 boxes to calibrate");
+    }
 
     var addToArray = function(sector) {
         if (sectorsVisited[sectorsVisited.length - 1] != sector) {
@@ -63,51 +60,33 @@
         // leftmost column
        if(x < (w/5)){
          if(y < 3*h/8){
-
            trackSector(1);
-           
          } else if(y < (3*h/4) && y > 3*h/8){
-
             trackSector(4);
-
          } else if (y > 3*h/4) {
-
             trackSector(7);
-
          }
        }
 
        // middle column
        if (3*w/5 < x && x < 4*w/5) {
         if(y < 3*h/8){
-
            trackSector(2);
-
          } else if(y < (3*h/4) && y > 3*h/8){
-
             trackSector(5);
-
          } else if (y > 3*h/4) {
-
             trackSector(8);
-
          }
        }
 
        // rightmost column
        if (4*w/5 < x) {
         if(y < 3*h/8){
-
            trackSector(3);
-
          } else if(y < (3*h/4) && y > 3*h/8){
-
             trackSector(6);
-
          } else if (y > 3*h/4) {
-
             trackSector(9);
-
          }
        }  
     }
@@ -116,8 +95,9 @@ window.onload = function() {
     webgazer.setRegression('ridge') /* currently must set regression and tracker */
         .setTracker('clmtrackr')
         .setGazeListener(function(data, clock) {
-            
+        
          if(clock > 5000 && data != null){
+            webgazer.clearGazeListener();
             classifer(data.x, data.y);
          }
          //   console.log(data); /* data is an object containing an x and y key which are the x and y prediction coordinates (no bounds limiting) */
