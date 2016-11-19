@@ -3,7 +3,6 @@
     <HEAD>
         <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
         <TITLE>Simple Demonstration of how WebGazer.js works</TITLE>
-        <link rel="stylesheet" href="styles.css">
     </HEAD>
     <BODY LANG="en-US" LINK="#0000ff" DIR="LTR">
     <div id="mydiv">
@@ -21,9 +20,9 @@
 
     var w = window.innerWidth;
     var h = window.innerHeight;
-    var first = 0;
 
     var sectorsVisited = [];
+    var sectorCounters = [];
     var sectorICounter = 0;
     var sectorIICounter = 0;
     var sectorIIICounter = 0;
@@ -34,93 +33,81 @@
     var sectorVIIICounter = 0;
     var sectorIXCounter = 0;
 
-    var reset = function() {
-        var sectorICounter = 0;
-        var sectorIICounter = 0;
-        var sectorIIICounter = 0;
-        var sectorIVCounter = 0;
-        var sectorVCounter = 0;
-        var sectorVICounter = 0;
-        var sectorVIICounter = 0;
-        var sectorVIIICounter = 0;
-        var sectorIXCounter = 0;
+    
+
+    var addToArray = function(sector) {
+        if (sectorsVisited[sectorsVisited.length - 1] != sector) {
+            sectorsVisited.push(sector);
+            alert("Stop");
+        }
     }
 
-    var initCalibration = function(){
-        alert("Move mouse and eyes to all 9 \
-            green areas, clicking within \ 
-            each as much as possible to calibrate the eye tracker. ");
+    var trackSector = function(sector) {
+        // reset every value except for the one we're currently one
+        for (i = 0; i < 9; i++) {
+            if (i != sector - 1) {
+                sectorCounters[i] = 0;
+            }   
+        }
+        console.log(sectorCounters);
+        // increment the counter
+        sectorCounters[sector - 1]++;
+        // if it has reached the threshold, add it officially
+        if (sectorCounters[sector - 1] > 100) {
+            console.log("HERE");
+            addToArray(sector);
+        }
     }
-
+    
     var classifer = function(x, y){
         // leftmost column
        if(x < (w/5)){
          if(y < 3*h/8){
-            reset();
-           console.log("sector I");
-           sectorICounter++;
-           if (sectorICounter > 1000) {
-            console.log(sectorsVisited);
-           }
 
+           trackSector(1);
+           
          } else if(y < (3*h/4) && y > 3*h/8){
-            reset();
-            console.log("sector IV");
-            sectorIVCounter++;
-            if (sectorIVCounter > 1000) {
-            }
+
+            trackSector(4);
+
          } else if (y > 3*h/4) {
-            reset();
-            console.log("Sector VII");
-            sectorVIICounter++;
-            if (sectorVIICounter > 1000) {
-            }
+
+            trackSector(7);
+
          }
        }
 
        // middle column
-       if (2*w/5 < x < 4*w/5) {
+       if (3*w/5 < x && x < 4*w/5) {
         if(y < 3*h/8){
-            reset();
-           console.log("sector II");
-           sectorIICounter++;
-           if (sectorIICounter > 1000) {
-           }
+
+           trackSector(2);
+
          } else if(y < (3*h/4) && y > 3*h/8){
-            reset();
-            console.log("sector V");
-            sectorVCounter++;
-           if (sectorVCounter > 1000) {
-           }
+
+            trackSector(5);
+
          } else if (y > 3*h/4) {
-            reset();
-            sectorVIIICounter++;
-            if (sectorVIIICounter > 1000) {
-            }
-            console.log("Sector VIII");
+
+            trackSector(8);
+
          }
        }
 
        // rightmost column
-       if (x < 4*w/5) {
+       if (4*w/5 < x) {
         if(y < 3*h/8){
-            reset();
-           console.log("sector III");
-           sectorIIICounter++;
-           if (sectorIIICounter > 1000) {
-           }
+
+           trackSector(3);
+
          } else if(y < (3*h/4) && y > 3*h/8){
-            reset();
-            sectorVICounter++;
-            if (sectorVICounter > 1000) {
-            }
-            console.log("sector VI");
+
+            trackSector(6);
+
          } else if (y > 3*h/4) {
-            reset();
-            console.log("Sector IX");
-            sectorIXCounter++;
-            if (sectorIXCounter > 1000) {
-            }
+
+            trackSector(9);
+
          }
        }  
     }
@@ -129,12 +116,8 @@ window.onload = function() {
     webgazer.setRegression('ridge') /* currently must set regression and tracker */
         .setTracker('clmtrackr')
         .setGazeListener(function(data, clock) {
-         if(first == 0){
-            initCalibration();
-            first = 1;
-         }
-         if(clock > 10000 && data != null){
-            webgazer.clearGazeListener();
+            
+         if(clock > 5000 && data != null){
             classifer(data.x, data.y);
          }
          //   console.log(data); /* data is an object containing an x and y key which are the x and y prediction coordinates (no bounds limiting) */
@@ -174,6 +157,13 @@ window.onload = function() {
 
         var cl = webgazer.getTracker().clm;
 
+        // initialize the empty array with zeroes
+        function initializeArray() {
+            for (i = 0; i < 9; i++) {
+                sectorCounters.push(0);
+            }
+        }
+
         function drawLoop() {
             requestAnimFrame(drawLoop);
             overlay.getContext('2d').clearRect(0,0,width,height);
@@ -182,6 +172,7 @@ window.onload = function() {
             }
         }
         drawLoop();
+        initializeArray();
     };
 
     function checkIfReady() {
