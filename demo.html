@@ -23,6 +23,7 @@
     var sectorsVisited = [];
 
     var classifer = function(x, y){
+        // leftmost column
        if(x < (w/5)){
          if(y < 3*h/8){
            console.log("sector I");
@@ -31,7 +32,29 @@
          } else if (y > 3*h/4) {
             console.log("Sector VII");
          }
-       } 
+       }
+
+       // middle column
+       if (2*w/5 < x < 4*w/5) {
+        if(y < 3*h/8){
+           console.log("sector II");
+         } else if(y < (3*h/4) && y > 3*h/8){
+            console.log("sector V");
+         } else if (y > 3*h/4) {
+            console.log("Sector VIII");
+         }
+       }
+
+       // rightmost column
+       if (x < 4*w/5) {
+        if(y < 3*h/8){
+           console.log("sector III");
+         } else if(y < (3*h/4) && y > 3*h/8){
+            console.log("sector VI");
+         } else if (y > 3*h/4) {
+            console.log("Sector VIIII");
+         }
+       }  
     }
 
 window.onload = function() {
