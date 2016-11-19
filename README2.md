@@ -6,8 +6,6 @@ See-Security is an eye tracking form of authentication. Using WebGazer, an eye t
 Setup:
 
 git clone 
-cd build
-./build_library
 in MAMP - Preferences > Web Server
 Set Document Root to See Security folder
 MAMP > Start Servers
