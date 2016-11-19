@@ -17,10 +17,30 @@
 
         <script src="build/webgazer.js"></script>
         <script>
+
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    var sectorsVisited = [];
+
+    var classifer = function(x, y){
+       if(x < (w/5)){
+         if(y < 3*h/8){
+           console.log("sector I");
+         } else if(y < (3*h/4) && y > 3*h/8){
+            console.log("sector IV");
+         } else if (y > 3*h/4) {
+            console.log("Sector VII");
+         }
+       } 
+    }
+
 window.onload = function() {
     webgazer.setRegression('ridge') /* currently must set regression and tracker */
         .setTracker('clmtrackr')
         .setGazeListener(function(data, clock) {
+         if(clock > 20000 && data != null){
+            classifer(data.x, data.y);
+         }
          //   console.log(data); /* data is an object containing an x and y key which are the x and y prediction coordinates (no bounds limiting) */
          //   console.log(clock); /* elapsed time in milliseconds since webgazer.begin() was called */
         })
