@@ -23,7 +23,7 @@
         <img id="calibrateImg7" src="calibration-green(7).png" style="position: absolute; top: 0; left: 0;">
         <img id="calibrateImg8" src="calibration-green(8).png" style="position: absolute; top: 0; left: 0;">
         <img id="calibrateImg9" src="calibration-green(9).png" style="position: absolute; top: 0; left: 0;">
-        <img id="calibrateImg0" src="calibration.png" style="position: relative; top: 0; left: 0;">
+        <img id="calibrateImg0" src="calibration.png" style="position: relative; top: 0; left: 0; z-index:999">
     </div>
 
     <div id = "eyes" class="center">
@@ -57,6 +57,12 @@
         }   
     }
 
+    function resetEyes() {
+        for(var j = 1; j < 4; j++){
+            document.getElementById('statusImg'+j).src = "https://d30y9cdsu7xlg0.cloudfront.net/png/204724-200.png";
+        }
+    }
+
     document.body.onmousedown = function() { 
       ++mouseDown;
     }
@@ -78,7 +84,7 @@
         }
     }
 
-    for(var i = 1; i < 10; i++){
+    for(var i = 0; i < 10; i++){
         var string = domID + i;
         showhide(string);
     }
@@ -124,7 +130,7 @@
             " When that box turns green, it has been calibrated.");
     }
 
-    var compareCodes = function(secretCode, sectorsVisited) {
+    var compareCodes = function(secretCode, sectorsVisited, sector) {
         for(i = secretCode.length; i--;) {
           if(secretCode[i] !== sectorsVisited[i]){
             tries++;
@@ -133,7 +139,11 @@
                 exit();
             }
             else{
+                resetEyes();
+                sectorsVisited.length = 0;
                 addedCounter = 0;
+                counter = 0;
+                sectorCounters[sector-1] = 0;
                 return;
             }
           }
@@ -148,10 +158,10 @@
             sectorsVisited.push(sector);
             addedCounter++;
             toggleStatus();
-            alert(sector + " sector added");
+            alert(sectorsVisited + " current sector vals");
             // if the added counter is equal to the true counter
             if(addedCounter == secretCodeCounter){
-                compareCodes(secretCode, sectorsVisited);
+                compareCodes(secretCode, sectorsVisited, sector);
             }
         }
     }
@@ -164,6 +174,7 @@
             }
         }
         alert("Calibration complete. Please enter passcode.");
+        calibrationComplete = 1;
         removeLayers();
         return true;
     }
@@ -175,7 +186,7 @@
                 sectorCounters[i] = 0;
             }   
         }
-        console.log(sectorCounters);
+        //console.log(sectorCounters);
         // increment the counter
         sectorCounters[sector - 1]++;
         // if it has reached the threshold, add it officially
@@ -186,16 +197,16 @@
              removeLayers();
              string = domID + sector;
              showhide(string);
-             console.log(string + " string unhidden");
+             // console.log(string + " string unhidden");
              calibratedSectors[sector-1]++;
              if(checkIfCalibrationComplete(calibratedSectors) == true){
-                calibrationComplete = 1;
+                console.log("calibration complete");
              }
            }
            // mouseDown--;
         }
-        else if (sectorCounters[sector - 1] > 100) {
-            console.log("HERE");
+        if (calibrationComplete == 1 && sectorCounters[sector - 1] > 100) {
+            //console.log("HERE");
             addToArray(sector);
         }
     }
@@ -246,7 +257,6 @@ window.onload = function() {
                 first = 1;
                 showhide("calibrateImg0");
             }
-            //webgazer.clearGazeListener();
             classifer(data.x, data.y);
          }
          else if(calibrationComplete == 1 && data != null){
@@ -254,6 +264,7 @@ window.onload = function() {
                 second = 1;
                 //showhide("eyes");
             }
+            //webgazer.clearGazeListener();
             classifer(data.x, data.y);
          }
          //   console.log(data); /* data is an object containing an x and y key which are the x and y prediction coordinates (no bounds limiting) */
