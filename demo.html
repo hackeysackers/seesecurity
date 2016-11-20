@@ -25,17 +25,52 @@
     var h = window.innerHeight;
     var init = 0; 
 
+    // number of tries
+    var tries = 0;
     var sectorsVisited = [];
     var sectorCounters = [];
+    //how many ints have been added to the guess
+    var attemptCodeCounter = 0;
+    var addedCounter = 0;
+    //how many ints added to the secret code 
+    //hard coded for now, later during initiate calibration
+    //it will set the secret password
+    var secretCodeCounter = 3;
+    //hard coded for now
+    var secretCode = [1, 6, 7];
 
     var initiateCalibration = function() {
         alert("Look at mouse and click in each of the 9 boxes to calibrate");
     }
 
+    var compareCodes = function(secretCode, sectorsVisited) {
+        for(var i = secretCode.length; i--;) {
+          if(secretCode[i] !== sectorsVisited[i]){
+            tries++;
+            if(tries > 5){
+                alert("You have exceded your tries. Now exiting.");
+                exit();
+            }
+            else{
+                addedCounter = 0;
+                return;
+            }
+          }
+        }
+      // match has been found
+      alert("Congrats! Match has been found for " + secretCode);
+      exit();
+    }
+
     var addToArray = function(sector) {
         if (sectorsVisited[sectorsVisited.length - 1] != sector) {
             sectorsVisited.push(sector);
-            alert("Stop");
+            addedCounter++;
+            alert(sector + " sector added");
+            // if the added counter is equal to the true counter
+            if(addedCounter == secretCodeCounter){
+                compareCodes(secretCode, sectorsVisited);
+            }
         }
     }
 
@@ -57,6 +92,7 @@
     }
     
     var classifer = function(x, y){
+        console.log(x + " " + y);
         // leftmost column
        if(x < (w/5)){
          if(y < 3*h/8){
@@ -97,7 +133,7 @@ window.onload = function() {
         .setGazeListener(function(data, clock) {
         
          if(clock > 5000 && data != null){
-            webgazer.clearGazeListener();
+            //webgazer.clearGazeListener();
             classifer(data.x, data.y);
          }
          //   console.log(data); /* data is an object containing an x and y key which are the x and y prediction coordinates (no bounds limiting) */
