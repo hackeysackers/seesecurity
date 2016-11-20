@@ -13,14 +13,52 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </HEAD>
     <BODY LANG="en-US" LINK="#0000ff" DIR="LTR">
+    
+
+
+   <!-- <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/204724-200.png"> -->
+   
+   
+    <div class="center">
+    <ul>
+    <li>
+    <img  id="statusImg1" src="https://d30y9cdsu7xlg0.cloudfront.net/png/204724-200.png">
+    </li>
+
+    <li>
+    <img  id="statusImg2" src="https://d30y9cdsu7xlg0.cloudfront.net/png/204724-200.png">
+    </li>
+
+    <li>
+    <img  id="statusImg3" src="https://d30y9cdsu7xlg0.cloudfront.net/png/204724-200.png">
+    </li>
+
+    </ul>
+    </div>
+</div>
+
+
     <div id="calibrateImg"class="fullBodyImg">
         <img src="http://i.imgur.com/zEn8TeP.png">
         
     </div>
-
+    
+    
     <script src="build/webgazer.js"></script>
     <script>
-
+    var counter = 0;
+    function toggleStatus() {
+        counter++;
+        if (counter == 1) {
+        document.getElementById('statusImg1').src = "http://www.freeiconspng.com/uploads/eyeball-icon-png-eye-icon-1.png";
+        } else if (counter == 2) {
+            document.getElementById('statusImg2').src = "http://www.freeiconspng.com/uploads/eyeball-icon-png-eye-icon-1.png";
+        } else if (counter == 3) {
+            document.getElementById('statusImg3').src = "http://www.freeiconspng.com/uploads/eyeball-icon-png-eye-icon-1.png";
+            alert("We did it!");
+        }
+        
+    }
     function showhide() {
         var img = document.getElementById('calibrateImg');
         if (img.style.visibility === 'hidden') {
@@ -53,6 +91,7 @@
 
     var initiateCalibration = function() {
         alert("Look at mouse and click in each of the 9 boxes to calibrate");
+        //showhide();
     }
 
     var compareCodes = function(secretCode, sectorsVisited) {
@@ -78,6 +117,7 @@
         if (sectorsVisited[sectorsVisited.length - 1] != sector) {
             sectorsVisited.push(sector);
             addedCounter++;
+            toggleStatus();
             alert(sector + " sector added");
             // if the added counter is equal to the true counter
             if(addedCounter == secretCodeCounter){
@@ -149,6 +189,7 @@ window.onload = function() {
             if(first == 0){
                 showhide();
                 first = 1;
+                
             }
             //webgazer.clearGazeListener();
             classifer(data.x, data.y);
