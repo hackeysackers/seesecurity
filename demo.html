@@ -13,12 +13,24 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </HEAD>
     <BODY LANG="en-US" LINK="#0000ff" DIR="LTR">
-    <div class="fullBodyImg">
+    <div id="calibrateImg"class="fullBodyImg">
         <img src="http://i.imgur.com/zEn8TeP.png">
         
     </div>
-        <script src="build/webgazer.js"></script>
-        <script>
+
+    <script src="build/webgazer.js"></script>
+    <script>
+
+    function showhide() {
+        var img = document.getElementById('calibrateImg');
+        if (img.style.visibility === 'hidden') {
+            // Currently hidden, make it visible
+            img.style.visibility = "visible";
+        } else {
+            // Currently visible, make it hidden
+            img.style.visibility = "hidden";
+        }
+    }
 
     var w = window.innerWidth;
     var h = window.innerHeight;
@@ -26,6 +38,7 @@
 
     // number of tries
     var tries = 0;
+    var first = 0;
     var sectorsVisited = [];
     var sectorCounters = [];
     //how many ints have been added to the guess
@@ -127,11 +140,16 @@
     }
 
 window.onload = function() {
+    initiateCalibration();
     webgazer.setRegression('ridge') /* currently must set regression and tracker */
         .setTracker('clmtrackr')
         .setGazeListener(function(data, clock) {
         
          if(clock > 5000 && data != null){
+            if(first == 0){
+                showhide();
+                first = 1;
+            }
             //webgazer.clearGazeListener();
             classifer(data.x, data.y);
          }
