@@ -24,12 +24,10 @@
 	background-color: black;
 }
 
-
-
 .fullBodyImg {
 	height: 100%;
 	width: 100%;
-	z-index: 5000;
+	
 }
 
 .fullBodyImg img {
@@ -40,7 +38,6 @@
     left: 0;
 }
 
-
 .center {
   position: fixed;
   top: 50%;
@@ -48,6 +45,7 @@
   /* bring your own prefixes */
   transform: translate(-50%, -50%);
   text-align: center;
+  z-index: 0;
 }
 
 .center ul {
