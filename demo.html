@@ -92,7 +92,6 @@
     function removeLayers() {
         for(var i = 0; i < 10; i++){
             var string = domID + i;
-            // console.log(string);
             var img = document.getElementById(string);
             if (img.style.visibility === 'visible'){
                 img.style.visibility = "hidden";
@@ -273,8 +272,8 @@ window.onload = function() {
         .begin()
         .showPredictionPoints(true); /* shows a square every 100 milliseconds where current prediction is */
 
-    var width = 320;
-    var height = 240;
+    var width = window.innerWidth/5;
+    var height = window.innerHeight/4;
     var topDist = '0px';
     var leftDist = '0px';
     
