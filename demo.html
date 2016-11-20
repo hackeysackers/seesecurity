@@ -26,8 +26,36 @@
         <img id="calibrateImg0" src="calibration.png" style="position: relative; top: 0; left: 0;">
     </div>
 
+    <div id = "eyes" class="center">
+        <ul>
+        <li>
+        <img  id="statusImg1" src="https://d30y9cdsu7xlg0.cloudfront.net/png/204724-200.png" style="position: relative;">
+        </li>
+        <li>
+        <img  id="statusImg2" src="https://d30y9cdsu7xlg0.cloudfront.net/png/204724-200.png" style="position: relative;">
+        </li>
+        <li>
+        <img  id="statusImg3" src="https://d30y9cdsu7xlg0.cloudfront.net/png/204724-200.png" style="position: relative;">
+        </li>
+        </ul>
+    </div>
+
     <script src="build/webgazer.js"></script>
     <script>
+
+    // for the status toggle
+    var counter = 0;
+    function toggleStatus() {
+        counter++;
+        if (counter == 1) {
+        document.getElementById('statusImg1').src = "http://www.freeiconspng.com/uploads/eyeball-icon-png-eye-icon-1.png";
+        } else if (counter == 2) {
+            document.getElementById('statusImg2').src = "http://www.freeiconspng.com/uploads/eyeball-icon-png-eye-icon-1.png";
+        } else if (counter == 3) {
+            document.getElementById('statusImg3').src = "http://www.freeiconspng.com/uploads/eyeball-icon-png-eye-icon-1.png";
+            alert("We did it!");
+        }   
+    }
 
     document.body.onmousedown = function() { 
       ++mouseDown;
@@ -73,6 +101,7 @@
     // number of tries
     var tries = 0;
     var first = 0;
+    var second = 0;
     var calibrationComplete = 0;
     var sectorsVisited = [];
     var calibratedSectors = [];
@@ -118,6 +147,7 @@
         if (sectorsVisited[sectorsVisited.length - 1] != sector) {
             sectorsVisited.push(sector);
             addedCounter++;
+            toggleStatus();
             alert(sector + " sector added");
             // if the added counter is equal to the true counter
             if(addedCounter == secretCodeCounter){
@@ -220,6 +250,10 @@ window.onload = function() {
             classifer(data.x, data.y);
          }
          else if(calibrationComplete == 1 && data != null){
+            if(second == 0){
+                second = 1;
+                //showhide("eyes");
+            }
             classifer(data.x, data.y);
          }
          //   console.log(data); /* data is an object containing an x and y key which are the x and y prediction coordinates (no bounds limiting) */

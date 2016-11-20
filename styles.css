@@ -24,14 +24,6 @@
 	background-color: black;
 }
 
-html { 
-  /*background: url(calibration.png) no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;*/
-}
-
 .fullBodyImg {
 	height: 100%;
 	width: 100%;
@@ -44,4 +36,34 @@ html {
 	position: absolute;
     top: 0;
     left: 0;
+}
+
+.center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 0;
+}
+
+.center ul {
+	width:70%;
+	margin: auto;
+	list-style: none;
+	text-align: center;
+	display: inline-table;
+}
+
+.center ul li {
+
+	display: inline;
+	list-style: none;
+	
+}
+
+.center ul li img {
+	max-width: 10%;
+	max-height: 10%;
 }
