@@ -13,22 +13,56 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </HEAD>
     <BODY LANG="en-US" LINK="#0000ff" DIR="LTR">
-    <div id="calibrateImg"class="fullBodyImg">
-        <img src="http://i.imgur.com/zEn8TeP.png">
-        
+    <div class="fullBodyImg">
+        <img id="calibrateImg1" src="calibration-green(1).png" style="position: absolute; top: 0; left: 0;">
+        <img id="calibrateImg2" src="calibration-green(2).png" style="position: absolute; top: 0; left: 0;">
+        <img id="calibrateImg3" src="calibration-green(3).png" style="position: absolute; top: 0; left: 0;">
+        <img id="calibrateImg4" src="calibration-green(4).png" style="position: absolute; top: 0; left: 0;">
+        <img id="calibrateImg5" src="calibration-green(5).png" style="position: absolute; top: 0; left: 0;">
+        <img id="calibrateImg6" src="calibration-green(6).png" style="position: absolute; top: 0; left: 0;">
+        <img id="calibrateImg7" src="calibration-green(7).png" style="position: absolute; top: 0; left: 0;">
+        <img id="calibrateImg8" src="calibration-green(8).png" style="position: absolute; top: 0; left: 0;">
+        <img id="calibrateImg9" src="calibration-green(9).png" style="position: absolute; top: 0; left: 0;">
+        <img id="calibrateImg0" src="calibration.png" style="position: relative; top: 0; left: 0;">
     </div>
 
     <script src="build/webgazer.js"></script>
     <script>
 
-    function showhide() {
-        var img = document.getElementById('calibrateImg');
+    document.body.onmousedown = function() { 
+      ++mouseDown;
+    }
+
+    document.body.onmouseup = function() {
+      --mouseDown;
+    }
+
+    var domID = "calibrateImg";
+    function showhide(domID) {
+        console.log(domID);
+        var img = document.getElementById(domID);
         if (img.style.visibility === 'hidden') {
             // Currently hidden, make it visible
             img.style.visibility = "visible";
         } else {
             // Currently visible, make it hidden
             img.style.visibility = "hidden";
+        }
+    }
+
+    for(var i = 1; i < 10; i++){
+        var string = domID + i;
+        showhide(string);
+    }
+
+    function removeLayers() {
+        for(var i = 0; i < 10; i++){
+            var string = domID + i;
+            // console.log(string);
+            var img = document.getElementById(string);
+            if (img.style.visibility === 'visible'){
+                img.style.visibility = "hidden";
+            }
         }
     }
 
@@ -39,8 +73,11 @@
     // number of tries
     var tries = 0;
     var first = 0;
+    var calibrationComplete = 0;
     var sectorsVisited = [];
+    var calibratedSectors = [];
     var sectorCounters = [];
+    var sectorClicks = [];
     //how many ints have been added to the guess
     var attemptCodeCounter = 0;
     var addedCounter = 0;
@@ -50,13 +87,16 @@
     var secretCodeCounter = 3;
     //hard coded for now
     var secretCode = [1, 6, 7];
+    var mouseDown = 0;
 
     var initiateCalibration = function() {
-        alert("Look at mouse and click in each of the 9 boxes to calibrate");
+        alert("Drag your cursor and click three times " + 
+            "over each of the 9 grey boxes." + 
+            " When that box turns green, it has been calibrated.");
     }
 
     var compareCodes = function(secretCode, sectorsVisited) {
-        for(var i = secretCode.length; i--;) {
+        for(i = secretCode.length; i--;) {
           if(secretCode[i] !== sectorsVisited[i]){
             tries++;
             if(tries > 5){
@@ -86,6 +126,18 @@
         }
     }
 
+    var checkIfCalibrationComplete = function(calibratedSectors) {
+        // console.log("final cali entered");
+        for(i = 0; i < 9; i++){
+            if(calibratedSectors[i] == 0){
+                return false;
+            }
+        }
+        alert("Calibration complete. Please enter passcode.");
+        removeLayers();
+        return true;
+    }
+
     var trackSector = function(sector) {
         // reset every value except for the one we're currently one
         for (i = 0; i < 9; i++) {
@@ -97,14 +149,29 @@
         // increment the counter
         sectorCounters[sector - 1]++;
         // if it has reached the threshold, add it officially
-        if (sectorCounters[sector - 1] > 100) {
+        if (calibrationComplete == 0 && mouseDown == 1) {
+           sectorClicks[sector - 1]++;
+           // console.log("click");
+           if(sectorClicks[sector - 1] == 3){
+             removeLayers();
+             string = domID + sector;
+             showhide(string);
+             console.log(string + " string unhidden");
+             calibratedSectors[sector-1]++;
+             if(checkIfCalibrationComplete(calibratedSectors) == true){
+                calibrationComplete = 1;
+             }
+           }
+           // mouseDown--;
+        }
+        else if (sectorCounters[sector - 1] > 100) {
             console.log("HERE");
             addToArray(sector);
         }
     }
     
     var classifer = function(x, y){
-        console.log(x + " " + y);
+        // console.log(x + " " + y);
         // leftmost column
        if(x < (w/5)){
          if(y < 3*h/8){
@@ -117,7 +184,7 @@
        }
 
        // middle column
-       if (3*w/5 < x && x < 4*w/5) {
+       if (2*w/5 < x && x < 4*w/5) {
         if(y < 3*h/8){
            trackSector(2);
          } else if(y < (3*h/4) && y > 3*h/8){
@@ -144,13 +211,15 @@ window.onload = function() {
     webgazer.setRegression('ridge') /* currently must set regression and tracker */
         .setTracker('clmtrackr')
         .setGazeListener(function(data, clock) {
-        
-         if(clock > 5000 && data != null){
+         if(calibrationComplete == 0 && data != null){
             if(first == 0){
-                showhide();
                 first = 1;
+                showhide("calibrateImg0");
             }
             //webgazer.clearGazeListener();
+            classifer(data.x, data.y);
+         }
+         else if(calibrationComplete == 1 && data != null){
             classifer(data.x, data.y);
          }
          //   console.log(data); /* data is an object containing an x and y key which are the x and y prediction coordinates (no bounds limiting) */
@@ -194,6 +263,8 @@ window.onload = function() {
         function initializeArray() {
             for (i = 0; i < 9; i++) {
                 sectorCounters.push(0);
+                sectorClicks.push(0);
+                calibratedSectors.push(0);
             }
         }
 
