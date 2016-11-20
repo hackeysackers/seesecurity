@@ -4,3 +4,11 @@
 	padding: 5%;
 	width: 20%;
 }
+
+.calibrateBackground{
+	background-image: url(calibrate.png);
+}
+
+.calibrateBackground.off{
+	background-image:none;
+}
