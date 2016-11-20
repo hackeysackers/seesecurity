@@ -53,7 +53,7 @@
             document.getElementById('statusImg2').src = "http://www.freeiconspng.com/uploads/eyeball-icon-png-eye-icon-1.png";
         } else if (counter == 3) {
             document.getElementById('statusImg3').src = "http://www.freeiconspng.com/uploads/eyeball-icon-png-eye-icon-1.png";
-            alert("We did it!");
+            
         }   
     }
 
@@ -166,7 +166,6 @@
     }
 
     var checkIfCalibrationComplete = function(calibratedSectors) {
-        // console.log("final cali entered");
         for(i = 0; i < 9; i++){
             if(calibratedSectors[i] == 0){
                 return false;
@@ -185,7 +184,7 @@
                 sectorCounters[i] = 0;
             }   
         }
-        //console.log(sectorCounters);
+        
         // increment the counter
         sectorCounters[sector - 1]++;
         // if it has reached the threshold, add it officially
@@ -196,7 +195,6 @@
              removeLayers();
              string = domID + sector;
              showhide(string);
-             // console.log(string + " string unhidden");
              calibratedSectors[sector-1]++;
              if(checkIfCalibrationComplete(calibratedSectors) == true){
                 console.log("calibration complete");
@@ -211,7 +209,6 @@
     }
     
     var classifer = function(x, y){
-        // console.log(x + " " + y);
         // leftmost column
        if(x < (w/5)){
          if(y < 3*h/8){
@@ -261,13 +258,10 @@ window.onload = function() {
          else if(calibrationComplete == 1 && data != null){
             if(second == 0){
                 second = 1;
-                //showhide("eyes");
             }
             //webgazer.clearGazeListener();
             classifer(data.x, data.y);
          }
-         //   console.log(data); /* data is an object containing an x and y key which are the x and y prediction coordinates (no bounds limiting) */
-         //   console.log(clock); /* elapsed time in milliseconds since webgazer.begin() was called */
         })
         .begin()
         .showPredictionPoints(true); /* shows a square every 100 milliseconds where current prediction is */
